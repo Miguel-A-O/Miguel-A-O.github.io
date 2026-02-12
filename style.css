@@ -2,7 +2,7 @@
   color-scheme: light;
   --ink: #111827;
   --muted: #4b5563;
-  --paper: #f8f5ef;
+  --paper: #E7F7FD;
   --card: #ffffff;
   --accent: #3EC0EF;
   --accent-soft: #C3EBFA;
@@ -213,6 +213,12 @@ a:focus-visible {
 .side-nav a:hover,
 .side-nav a:focus-visible {
   background: var(--accent-soft);
+}
+
+.side-nav a.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
 }
 
 .sidebar-widget {
