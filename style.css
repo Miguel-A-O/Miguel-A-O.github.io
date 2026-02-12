@@ -2,11 +2,11 @@
   color-scheme: light;
   --ink: #111827;
   --muted: #4b5563;
-  --paper: #f8f5ef;
+  --paper: #E7F7FD;
   --card: #ffffff;
-  --accent: #b45309;
-  --accent-soft: #fdebd3;
-  --border: #e7e3da;
+  --accent: #3EC0EF;
+  --accent-soft: #C3EBFA;
+  --border: #E7F7FD;
   --shadow: 0 18px 48px rgba(17, 24, 39, 0.12);
 }
 
@@ -16,10 +16,16 @@
   padding: 0;
 }
 
+html {
+  min-height: 100%;
+  background: radial-gradient(circle at top, #C6E6F1 0%, #A1D6E8 45%, #7CC6DF 100%);
+}
+
 body {
   font-family: "Source Sans 3", "Gill Sans", "Helvetica Neue", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at top, #fdf9f2 0%, #f3efe7 45%, #efe7d8 100%);
+  min-height: 100%;
+  background: radial-gradient(circle at top, #C6E6F1 0%, #A1D6E8 45%, #7CC6DF 100%);
   line-height: 1.6;
 }
 
@@ -207,6 +213,12 @@ a:focus-visible {
 .side-nav a:hover,
 .side-nav a:focus-visible {
   background: var(--accent-soft);
+}
+
+.side-nav a.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
 }
 
 .sidebar-widget {
