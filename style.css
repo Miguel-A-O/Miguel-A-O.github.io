@@ -19,7 +19,7 @@
 body {
   font-family: "Source Sans 3", "Gill Sans", "Helvetica Neue", sans-serif;
   color: var(--ink);
-  background: radial-gradient(circle at top, #fdf9f2 0%, #f3efe7 45%, #efe7d8 100%);
+  background: radial-gradient(circle at top, #A1D6E8 0%, #7CC6DF 45%, #57B6D6 100%);
   line-height: 1.6;
 }
 
