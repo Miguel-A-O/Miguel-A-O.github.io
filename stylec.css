@@ -11,6 +11,7 @@ h1, h2, h3, h4 {
 }
 
 :root {
+  
   color-scheme: dark;
 
   --bg-main: #050B14;
@@ -44,18 +45,32 @@ html, body {
 }
 
 /* subtle tech grid */
+/* Circuit board pattern with traces and nodes */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-
+  
   background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    /* Circuit traces - horizontal */
+    linear-gradient(90deg, transparent 49%, rgba(62,192,239,0.08) 49%, rgba(62,192,239,0.08) 51%, transparent 51%),
+    /* Circuit traces - vertical */
+    linear-gradient(transparent 49%, rgba(62,192,239,0.08) 49%, rgba(62,192,239,0.08) 51%, transparent 51%),
+    /* Node points */
+    radial-gradient(circle at 50% 50%, rgba(62,192,239,0.3) 0%, rgba(62,192,239,0.3) 15%, transparent 16%),
+    /* Offset traces for complexity */
+    linear-gradient(120deg, transparent 48%, rgba(62,192,239,0.05) 48%, rgba(62,192,239,0.05) 52%, transparent 52%),
+    linear-gradient(60deg, transparent 48%, rgba(62,192,239,0.05) 48%, rgba(62,192,239,0.05) 52%, transparent 52%);
+  
+  background-size: 80px 80px, 80px 80px, 80px 80px, 120px 120px, 120px 120px;
+  opacity: 0.5;
+  animation: circuit-pulse 8s ease-in-out infinite;
+}
 
-  background-size: 120px 120px;
-  opacity: 0.3;
+@keyframes circuit-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
 }
 
 img {
@@ -84,7 +99,9 @@ a:focus-visible {
   padding: 2.5rem 6vw 1.5rem;
 }
 
+
 .header-text h1 {
+    
   font-size: clamp(2rem, 3vw, 3rem);
   letter-spacing: 0.02em;
   display: flex;
@@ -93,22 +110,34 @@ a:focus-visible {
 
   color: var(--accent);
   text-shadow: 0 0 6px rgba(62,192,239,0.5);
+  position: relative;
+  animation: glitch-text 5s infinite;
 }
+
+@keyframes glitch-text {
+  0%, 90%, 100% { text-shadow: 0 0 6px rgba(62,192,239,0.5); }
+  92% { text-shadow: -2px 0 #00FF88, 2px 0 #FF00FF; }
+  94% { text-shadow: 2px 0 #00FF88, -2px 0 #FF00FF; }
+  96% { text-shadow: 0 0 6px rgba(62,192,239,0.5); }
+}
+
 
 .name-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 64px;
   height: 64px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(62,192,239,0.1);
-  box-shadow: var(--glow-soft);
-  overflow: hidden;
-  flex-shrink: 0;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(135deg, rgba(62,192,239,0.2), rgba(62,192,239,0.05));
+  border: none;
+  box-shadow: 
+    0 0 15px rgba(62,192,239,0.5),
+    inset 0 0 20px rgba(62,192,239,0.1);
+  animation: node-glow 3s ease-in-out infinite;
 }
 
+@keyframes node-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(62,192,239,0.5), inset 0 0 20px rgba(62,192,239,0.1); }
+  50% { box-shadow: 0 0 25px rgba(62,192,239,0.8), inset 0 0 30px rgba(62,192,239,0.2); }
+}
 .name-logo img {
   width: 100%;
   height: 100%;
@@ -163,6 +192,64 @@ a:focus-visible {
 
   transition: 0.25s ease;
 }
+.main-content section {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px; /* More angular for circuit feel */
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  transition: 0.25s ease;
+}
+
+/* Circuit corner nodes */
+.main-content section::before,
+.main-content section::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--accent);
+  background: var(--bg-main);
+  box-shadow: 0 0 10px rgba(62,192,239,0.6);
+}
+
+.main-content section::before {
+  top: -6px;
+  left: -6px;
+  border-radius: 50%;
+}
+
+.main-content section::after {
+  bottom: -6px;
+  right: -6px;
+  border-radius: 50%;
+}
+
+/* Data flow lines */
+.main-content section + section::before {
+  content: "";
+  position: absolute;
+  top: -1rem;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4px,
+    rgba(62,192,239,0.8) 4px,
+    rgba(62,192,239,0.8) 8px
+  );
+  box-shadow: 0 0 8px rgba(62,192,239,0.5);
+  animation: data-flow 2s linear infinite;
+}
+
+@keyframes data-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 16px 0; }
+}
 
 .main-content section:hover {
   border-color: var(--accent);
@@ -191,6 +278,8 @@ a:focus-visible {
 
   box-shadow: var(--glow-soft);
 }
+
+
 
 /* ================= TEXT ================= */
 
