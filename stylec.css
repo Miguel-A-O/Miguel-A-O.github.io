@@ -196,10 +196,15 @@ a:focus-visible {
 
 .main-content h2 {
   font-size: clamp(1.5rem, 2vw, 2.1rem);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
 
   color: var(--accent);
   text-shadow: 0 0 6px rgba(62,192,239,0.4);
+}
+
+.main-content section p {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
 }
 
 /* ================= INTRO ================= */
@@ -216,8 +221,82 @@ a:focus-visible {
   border: 1px solid var(--border);
 }
 
+/* Estilos específicos para GEDNOL */
+.gednol-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  text-align: center;
+}
+
+.gednol-intro img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.gednol-intro .intro-text {
+  max-width: 600px;
+}
+
+.gednol-tagline {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ================= MISIÓN Y VISIÓN ================= */
+
+.mission-vision-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.mission-card,
+.vision-card {
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(62, 192, 239, 0.08);
+  border: 2px solid var(--accent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--glow-soft);
+  transition: 0.3s ease;
+}
+
+.mission-card:hover,
+.vision-card:hover {
+  background: rgba(62, 192, 239, 0.15);
+  box-shadow: 0 0 20px rgba(62, 192, 239, 0.6);
+  transform: translateY(-4px);
+}
+
+.mission-card h3,
+.vision-card h3 {
+  color: var(--accent);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 6px rgba(62, 192, 239, 0.4);
+}
+
+.mission-card p,
+.vision-card p {
+  line-height: 1.7;
+}
+
 .intro-text p {
   margin-bottom: 0.8rem;
+}
+
+.cta-button {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: 0.25s ease;
 }
 
 /* ================= BOOKS ================= */
@@ -275,8 +354,9 @@ a:focus-visible {
 .highlights-list {
   list-style: none;
   display: grid;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
+  gap: 1.2rem;
+  margin: 2rem 0;
+  padding-left: 0;
 }
 
 .highlights-list li {
@@ -284,6 +364,26 @@ a:focus-visible {
   border-radius: 12px;
   background: rgba(62,192,239,0.08);
   border: 1px solid var(--border);
+}
+
+/* Estilos específicos para la lista en info-section (about.html) */
+.info-section .highlights-list {
+  list-style: disc;
+  display: block;
+  gap: 0.8rem;
+  margin: 2rem 0 2rem 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.info-section .highlights-list li {
+  display: list-item;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  border: none;
+  color: var(--ink);
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
 }
 
 /* ================= SIDEBAR ================= */
