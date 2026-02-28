@@ -21,6 +21,7 @@ h1, h2, h3 {
 h4 {
   font-family: 'Allura', cursive;
   font-size: clamp(1.5rem, 1.5vw, 2.25rem);
+  font-weight: 400;
   color: #FFFFFF;
   transform: scaleX(0.9);
   display: block;        /* Ocupa el ancho del contenedor 'table' */
@@ -510,39 +511,32 @@ a:focus-visible {
 
 /* ================= HIGHLIGHTS ================= */
 
-.highlights-list {
-  list-style: none;
-  display: grid;
-  gap: 1.2rem;
-  margin: 2rem 0;
-  padding-left: 0;
+.highlights-section {
+  display: flex;
+  flex-direction: column;  /* Alinea los elementos en vertical */
+  align-items: center;      /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente si la sección tiene altura */
+  text-align: center;       /* Centra las líneas de texto */
+  gap: 1.5rem;             /* Espacio entre la imagen y el texto */
+  padding: 2rem;
+  width: 100%;             /* Asegura que ocupe todo el ancho disponible */
 }
 
-.highlights-list li {
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  background: rgba(62,192,239,0.08);
+.congress-info h3 {
+  margin-bottom: 0.5rem;
+  color: var(--accent);    /* Mantiene tu estilo de color azul */
+}
+
+.congress-description {
+  max-width: 500px;        /* Evita que el texto se estire demasiado en pantallas grandes */
+  margin: 0 auto;          /* Refuerza el centrado del bloque de texto */
+}
+
+/* Ajuste opcional para la imagen */
+.highlights-section img {
+  border-radius: 12px;     /* Para que combine con el resto de tu diseño */
+  box-shadow: var(--shadow);
   border: 1px solid var(--border);
-}
-
-/* Estilos específicos para la lista en info-section (about.html) */
-.info-section .highlights-list {
-  list-style: disc;
-  display: block;
-  gap: 0.8rem;
-  margin: 2rem 0 2rem 1.5rem;
-  padding-left: 1.5rem;
-}
-
-.info-section .highlights-list li {
-  display: list-item;
-  padding: 0;
-  border-radius: 0;
-  background: none;
-  border: none;
-  color: var(--ink);
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
 }
 
 /* ================= SIDEBAR ================= */
