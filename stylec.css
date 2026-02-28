@@ -11,28 +11,32 @@ h1, h2, h3 {
   letter-spacing: 0.01em;
 }
 .sparkle-text-wrapper {
-  display: inline-block;
+  display: table;        /* Se ajusta al ancho del h4 como un guante */
+  margin: 2rem auto;     /* El 'auto' lo centra horizontalmente sin afectar a otros */
   position: relative;
-  padding: 1rem 2rem;
+  padding: 1.5rem 3rem;  /* Espacio para las estrellas */
+  text-align: center;    /* Centra el h4 dentro de este cuadro */
 }
 
 h4 {
   font-family: 'Allura', cursive;
   font-size: clamp(1.5rem, 1.5vw, 2.25rem);
-  font-weight: 400;
   color: #FFFFFF;
   transform: scaleX(0.9);
-  transform-origin: left center;
-  position: relative;
-  z-index: 2;
+  display: block;        /* Ocupa el ancho del contenedor 'table' */
+  margin: 0;
   text-shadow: 0 0 10px rgba(62, 192, 239, 0.8);
 }
 
 /* CONFIGURACIÓN MAESTRA DE ESTRELLAS */
-.sparkle-text-wrapper ::before,
-.sparkle-text-wrapper ::after,
 .sparkle-text-wrapper::before,
-.sparkle-text-wrapper::after {
+.sparkle-text-wrapper::after,
+.extra-stars-1::before,
+.extra-stars-1::after,
+.extra-stars-2::before,
+.extra-stars-2::after,
+.extra-stars-3::before,
+.extra-stars-3::after {
   content: "✦";
   position: absolute;
   color: #FFF;
@@ -362,6 +366,7 @@ a:focus-visible {
 }
 
 /* ================= INTRO ================= */
+
 
 .intro-body {
   display: grid;
