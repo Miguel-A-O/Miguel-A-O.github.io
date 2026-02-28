@@ -10,59 +10,68 @@ h1, h2, h3 {
   font-family: 'Courier Prime', 'Courier New', monospace;
   letter-spacing: 0.01em;
 }
+.sparkle-text-wrapper {
+  display: inline-block;
+  position: relative;
+  padding: 1rem 2rem;
+}
 
 h4 {
   font-family: 'Allura', cursive;
   font-size: clamp(1.5rem, 1.5vw, 2.25rem);
   font-weight: 400;
-  color: var(--accent);
-  text-shadow: 0 0 1px rgba(102, 208, 247, 0.384);
+  color: #FFFFFF;
   transform: scaleX(0.9);
   transform-origin: left center;
-  letter-spacing: 0.04em;
-  
   position: relative;
-  display: inline-block;
+  z-index: 2;
+  text-shadow: 0 0 10px rgba(62, 192, 239, 0.8);
 }
 
-h4::before {
-  content: "⁂";
-  margin-left: 0.4rem;
-  font-size: 0.7em;
-  color: var(--accent);
-  opacity: 0.7;
-  animation: dust-sparkle 3s ease-in-out infinite;
-  text-shadow: 0 0 8px var(--accent), 0 0 15px rgba(62, 192, 239, 0.5);
+/* CONFIGURACIÓN MAESTRA DE ESTRELLAS */
+.sparkle-text-wrapper ::before,
+.sparkle-text-wrapper ::after,
+.sparkle-text-wrapper::before,
+.sparkle-text-wrapper::after {
+  content: "✦";
+  position: absolute;
+  color: #FFF;
+  text-shadow: 0 0 10px #FFF, 0 0 20px var(--accent);
+  opacity: 0;
+  animation: sparkle-float 4s infinite;
 }
 
-h4::after {
-  content: "⁂";
-  margin-left: 0.4rem;
-  font-size: 0.7em;
-  color: var(--accent);
-  opacity: 0.7;
-  animation: dust-sparkle 3s ease-in-out infinite;
-  text-shadow: 0 0 8px var(--accent), 0 0 15px rgba(62, 192, 239, 0.5);
-}
+/* --- DISTRIBUCIÓN MANUAL --- */
 
-@keyframes dust-sparkle {
+/* Estrellas en las 4 esquinas extremas */
+.sparkle-text-wrapper::before { top: -5px; left: 0; font-size: 1.2rem; animation-delay: 0s; }
+.sparkle-text-wrapper::after { bottom: -5px; right: 0; font-size: 1rem; animation-delay: 1.2s; }
+
+/* Estrellas en la parte superior (izquierda y derecha) */
+.extra-stars-1::before { top: -10px; left: 25%; font-size: 0.7rem; animation-delay: 0.5s; }
+.extra-stars-1::after { top: -10px; left: 75%; font-size: 0.8rem; animation-delay: 1.8s; }
+
+/* Estrellas en la parte inferior (izquierda y derecha) */
+.extra-stars-2::before { bottom: -8px; left: 35%; font-size: 0.6rem; animation-delay: 2.2s; }
+.extra-stars-2::after { bottom: -8px; left: 65%; font-size: 0.9rem; animation-delay: 0.8s; }
+
+/* Estrellas en los laterales (centradas verticalmente) */
+.extra-stars-3::before { top: 40%; left: -15px; font-size: 0.8rem; animation-delay: 3s; }
+.extra-stars-3::after { top: 60%; right: -15px; font-size: 0.7rem; animation-delay: 1.5s; }
+
+/* Estrellas pegadas al texto (para dar variedad) */
+h4::before { top: 5px; right: 15%; font-size: 0.5rem; animation-delay: 2.5s; }
+h4::after { bottom: 5px; left: 10%; font-size: 0.5rem; animation-delay: 3.5s; }
+
+/* ANIMACIÓN */
+@keyframes sparkle-float {
   0%, 100% { 
-    opacity: 0.7;
-    transform: rotate(0deg) scale(1);
+    opacity: 0; 
+    transform: scale(0.3) translateY(0); 
   }
   50% { 
-    opacity: 1;
-    transform: rotate(15deg) scale(1.1);
-  }
-}
-@keyframes twinkle {
-  0%, 100% { 
     opacity: 1; 
-    text-shadow: 0 0 6px var(--accent), 0 0 12px var(--accent);
-  }
-  50% { 
-    opacity: 0.4; 
-    text-shadow: 0 0 2px var(--accent);
+    transform: scale(1.1) translateY(-5px); 
   }
 }
 
