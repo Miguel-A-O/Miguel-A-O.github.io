@@ -655,6 +655,36 @@ a:focus-visible {
   }
 }
 
+/* Contador de vistas */
+.view-counter {
+  padding: 1.5rem 1rem;
+  background: linear-gradient(135deg, rgba(62, 192, 239, 0.15), rgba(62, 192, 239, 0.05));
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(62, 192, 239, 0.3);
+  text-align: center;
+}
+
+.counter-number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(62, 192, 239, 0.8);
+  margin-bottom: 0.5rem;
+  font-family: 'Courier Prime', monospace;
+  letter-spacing: 2px;
+}
+
+.view-counter p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
+
 @media (max-width: 720px) {
   .book-list {
     grid-template-columns: 1fr;
