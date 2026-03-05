@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.min.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Articulos · Ppablo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <source src="assets/articulos1.pdf" type="application/pdf">
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap"
     rel="stylesheet"
@@ -13,6 +16,11 @@
   <link rel="stylesheet" href="stylec.css" />
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+<!-- Modern PDF.js Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
 </head>
 
 <body>
@@ -33,9 +41,31 @@
 
   <div class="page-layout">
     <main class="main-content">
-      <section class="info-section">
-        <h2>Artículos</h2>
-        <iframe src="assets/articulos1.pdf" width="100%" height="800px" style="border:none;"></iframe>
+<section class="info-section">
+  <h2>Artículos</h2>
+  
+  <div id="pdf-container">
+    <!-- Toolbar -->
+    <div id="toolbar">
+      <button id="prev-page">Anterior</button>
+      <span>Página: <span id="page-num">0</span> / <span id="page-count">0</span></span>
+      <button id="next-page">Siguiente</button>
+    </div>
+    
+    <!-- Viewer Area -->
+    <div id="pdf-viewer">
+      <canvas id="pdf-canvas"></canvas>
+      <!-- These classes are required by the modern library -->
+      <div id="text-layer" class="textLayer"></div>
+      <div id="annotation-layer" class="annotationLayer"></div>
+    </div>
+  </div>
+  
+  <p><small>Seleccione texto o haga clic en los enlaces dentro del visor.</small></p>
+</section>
+  
+  <p><small>Seleccione texto o haga clic en los enlaces dentro del visor.</small></p>
+</section>          
       </section>
 
       <section class="info-section">
@@ -87,70 +117,7 @@
     <p>Designed and developed by <strong>Miguel Ángel Arias</strong> & <strong>Daniel Alejandro Henao</strong></p>
   </footer>
 
-  <script>
-    // Inicializar Firebase
-    const firebaseConfig = {
-      databaseURL: "https://ppablo-f1705-default-rtdb.firebaseio.com"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-
-    // Función para actualizar el contador global
-    function updateViewCount() {
-      // Verificar si ya se contó una vista en esta sesión
-      if (sessionStorage.getItem('viewCounted')) {
-        return; // Ya se contó, no contar de nuevo
-      }
-
-      const counterRef = database.ref('totalViews');
-
-      counterRef.transaction(function(current_value) {
-        return (current_value || 0) + 1;
-      }).then(function(result) {
-        if (result.committed) {
-          // Marcar que ya se contó esta sesión
-          sessionStorage.setItem('viewCounted', 'true');
-          document.getElementById('view-count').textContent = result.snapshot.val();
-        }
-      });
-    }
-
-    // Escuchar cambios en tiempo real
-    function listenToViewCount() {
-      const counterRef = database.ref('totalViews');
-
-      counterRef.on('value', function(snapshot) {
-        const count = snapshot.val() || 0;
-        document.getElementById('view-count').textContent = count;
-      });
-    }
-
-    // Actualizar al cargar la página
-    window.addEventListener('load', function() {
-      updateViewCount();
-      listenToViewCount();
-    });
-
-    const toggleButton = document.querySelector("[data-sidebar-toggle]");
-    const scrim = document.querySelector("[data-scrim]");
-    const body = document.body;
-
-    const setSidebarOpen = (open) => {
-      body.dataset.sidebarOpen = open ? "true" : "false";
-      toggleButton.setAttribute("aria-expanded", String(open));
-    };
-
-    toggleButton.addEventListener("click", () => {
-      const isOpen = body.dataset.sidebarOpen === "true";
-      setSidebarOpen(!isOpen);
-    });
-
-    scrim.addEventListener("click", () => setSidebarOpen(false));
-
-    document.querySelectorAll(".side-nav a").forEach((link) => {
-      link.addEventListener("click", () => setSidebarOpen(false));
-    });
-  </script>
+  <script src="pdf.js"></script>
+  <script src="firebase.js"></script>
 </body>
 </html>
