@@ -285,6 +285,16 @@ a:focus-visible {
   margin-top: 10px;       /* Gives the icons some breathing room from the text above */
 }
 
+.social-icons img {
+  border-radius: 12px;    /* Rounded borders for social media icons */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+}
+
+.social-icons img:hover {
+  transform: scale(1.1);  /* Slight zoom on hover */
+  box-shadow: 0 4px 12px rgba(62, 192, 239, 0.3); /* Glow effect on hover */
+}
+
 /* ================= LAYOUT ================= */
 
 .page-layout {
