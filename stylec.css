@@ -521,6 +521,55 @@ a:focus-visible {
   transition: 0.25s ease;
 }
 
+.articles-list {
+  margin-top: 0.75rem;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.articles-list li {
+  padding: 1.25rem 1.35rem;
+  border-radius: 16px;
+  background: rgba(62, 192, 239, 0.08);
+  border: 2px solid var(--accent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--glow-soft);
+  transition: 0.3s ease;
+}
+
+.articles-list li:hover {
+  background: rgba(62, 192, 239, 0.15);
+  box-shadow: 0 0 20px rgba(62, 192, 239, 0.6);
+  transform: translateY(-4px);
+}
+
+.articles-list a {
+  display: inline;
+  margin-top: 0;
+  color: transparent;
+  text-shadow: none;
+  font-size: 0;
+  white-space: nowrap;
+  transition: 0.25s ease;
+}
+
+.articles-list a::after {
+  content: " DOI →";
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 8px rgba(62, 192, 239, 0.35);
+}
+
+.articles-list a:hover::after,
+.articles-list a:focus-visible::after {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ================= BOOKS ================= */
 
 .latest-book .book-entry {
