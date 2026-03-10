@@ -564,6 +564,10 @@ a:focus-visible {
   text-shadow: 0 0 8px rgba(62, 192, 239, 0.35);
 }
 
+.articles-list a[data-link-label="URL"]::after {
+  content: " URL →";
+}
+
 .articles-list a:hover::after,
 .articles-list a:focus-visible::after {
   text-decoration: underline;
