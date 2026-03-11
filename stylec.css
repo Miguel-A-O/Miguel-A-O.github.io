@@ -603,6 +603,10 @@ a:focus-visible {
   transition: 0.25s ease;
 }
 
+.book-list .book-entry:only-child {
+  grid-column: 2 / 3;
+}
+
 .book-list .book-entry:hover {
   transform: translateY(-4px);
   border-color: var(--accent);
