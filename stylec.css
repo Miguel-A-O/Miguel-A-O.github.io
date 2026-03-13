@@ -521,6 +521,18 @@ a:focus-visible {
   transition: 0.25s ease;
 }
 
+.thesis-subtitle {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-left: 4px solid var(--accent);
+  padding-left: 0.75rem;
+}
+
 .articles-list {
   margin-top: 0.75rem;
   padding-left: 0;
