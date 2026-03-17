@@ -26,24 +26,25 @@ async function handleAutomaticView() {
     const totalRef = database.ref('totalViews');
     const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
-    // 1. TRY to set the 12-hour record. 
-    // If it's been less than 12 hours, Firebase Rules will throw an error here.
-    await userVisitRef.set(serverTime);
+    // --- STEP 1: THE LOCK ---
+    // If it's been less than 12 hours, this line WILL trigger an error.
+    // Because there is no '.catch()' here, the code will jump STRAIGHT to the bottom.
+    await userVisitRef.set(serverTime); 
 
-    // 2. If we reach this line, it means Step 1 succeeded! 
-    // Now (and ONLY now) we update the counter.
+    // --- STEP 2: THE COUNTER ---
+    // This line will NEVER run if Step 1 failed.
     const result = await totalRef.transaction((current) => (current || 0) + 1);
 
     if (result.committed) {
-      console.log("Counted! New total:", result.snapshot.val());
+      console.log("Verified visit! New total:", result.snapshot.val());
     }
 
   } catch (error) {
-    // This catches the 'permission_denied' from the 12-hour rule
-    if (error.code === 'PERMISSION_DENIED' || error.message.includes("permission_denied")) {
-      console.warn("View blocked: Cooldown active (12-hour rule).");
+    // This is where the code lands if Step 1 (the lock) fails.
+    if (error.message.includes("permission_denied")) {
+      console.warn("COOLDOWN ACTIVE: The counter was NOT incremented.");
     } else {
-      console.error("Critical Error:", error.message);
+      console.error("System Error:", error.message);
     }
   }
 }
