@@ -1,4 +1,4 @@
-// 1. Configuration 
+// 1. Configuration (Keep yours as is)
 const firebaseConfig = {
   apiKey: "AIzaSyAvqzXyxD5e2ZUYtw6EyWtILTEDNYM99I0",
   authDomain: "ppablo-f1705.firebaseapp.com",
@@ -9,32 +9,54 @@ const firebaseConfig = {
   appId: "1:672547838947:web:65b1ece03ac52b2abbded6"
 };
 
-// 2. Initialize 
+// 2. Initialize
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const database = firebase.database();
+const auth = firebase.auth();
 
-// 3. The Logic 
+// 3. The Unified Logic
 async function handleAutomaticView() {
   try {
-    const userCredential = await firebase.auth().signInAnonymously();
+    // A. Sign in Anonymously to satisfy the "auth != null" rule
+    const userCredential = await auth.signInAnonymously();
     const uid = userCredential.user.uid;
-    console.log("Authenticated as:", uid);
-
+    
     const userVisitRef = database.ref('user_visits/' + uid);
     const totalRef = database.ref('totalViews');
-    const serverTimestamp = firebase.database.ServerValue.TIMESTAMP;
+    const logRef = database.ref('accessLogs');
+    const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
-    await userVisitRef.set(serverTimestamp);
-    await totalRef.transaction((current) => (current || 0) + 1);
-    
-    console.log("View recorded!");
+    // B. Update the individual user visit first (to satisfy the Security Rule)
+    // This will FAIL if the user visited less than 12 hours ago
+    await userVisitRef.set(serverTime);
+
+    // C. If the above passed, increment the total count
+    const result = await totalRef.transaction((current) => (current || 0) + 1);
+
+    if (result.committed) {
+      // D. Log the success automatically
+      logRef.push({
+        timestamp: serverTime,
+        device: navigator.userAgent,
+        action: "increment_success",
+        newCount: result.snapshot.val(),
+        uid: uid
+      });
+    }
+
   } catch (error) {
+    // E. Log the rejection (if someone tries to spam or bypass)
+    database.ref('accessLogs').push({
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        device: navigator.userAgent,
+        action: "REJECTED_OR_COOLDOWN",
+        error: error.message
+    });
+    
     if (error.code === 'PERMISSION_DENIED') {
-        console.warn("View not counted: You've already visited in the last 12 hours.");
-    } else {
-        console.error("Auth/Database Error:", error.code, error.message);
+        console.warn("View blocked: Security rules enforced cooldown or unauthorized access.");
     }
   }
 }
@@ -77,3 +99,4 @@ window.addEventListener('load', () => {
     link.addEventListener('click', () => setSidebarOpen(false));
   });
 });
+
