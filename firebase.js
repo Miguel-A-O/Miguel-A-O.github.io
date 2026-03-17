@@ -19,7 +19,6 @@ const auth = firebase.auth();
 // 3. The Unified Logic
 async function handleAutomaticView() {
   try {
-    // 1. Ensure Auth is active
     const userCredential = await auth.signInAnonymously();
     const uid = userCredential.user.uid;
 
@@ -28,28 +27,29 @@ async function handleAutomaticView() {
     const logRef = database.ref('accessLogs');
     const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
-    // 2. Log the visit attempt first (Information gathering)
-    logRef.push({
-      timestamp: serverTime,
-      device: navigator.userAgent,
-      action: "page_load_attempt",
-      uid: uid
-    });
+    // STEP 1: Try to update the 12-hour timestamp
+    // If this fails (due to the security rule), it throws an error and stops.
+    await userVisitRef.set(serverTime);
 
-    // 3. Update User Visit (Silent - if it fails, we don't stop)
-    userVisitRef.set(serverTime).catch(e => console.log("Visit record skipped"));
-
-    // 4. THE COUNTER: This is the main event
-    const result = await totalRef.transaction((current) => {
-      return (current || 0) + 1;
-    });
+    // STEP 2: If we got here, it means the 12 hours have passed!
+    const result = await totalRef.transaction((current) => (current || 0) + 1);
 
     if (result.committed) {
-      console.log("Counter updated to:", result.snapshot.val());
+      logRef.push({
+        timestamp: serverTime,
+        action: "increment_success",
+        uid: uid
+      });
+      console.log("Visit verified and counted!");
     }
 
   } catch (error) {
-    console.error("Critical Error:", error.message);
+    // This catches the 'Permission Denied' from the 12-hour rule
+    if (error.code === 'PERMISSION_DENIED') {
+      console.log("Cooldown active: You've visited in the last 12 hours.");
+    } else {
+      console.error("Error:", error.message);
+    }
   }
 }
 
