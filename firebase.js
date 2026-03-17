@@ -19,12 +19,15 @@ const auth = firebase.auth();
 // 3. The Unified Logic
 async function handleAutomaticView() {
   try {
-    // A. Sign in Anonymously to satisfy the "auth != null" rule
+    // Force a clean sign-in
     const userCredential = await auth.signInAnonymously();
     const uid = userCredential.user.uid;
     
+    // Add a tiny delay (500ms) to ensure the server knows who you are
+    await new Promise(resolve => setTimeout(resolve, 500)); 
+
     const userVisitRef = database.ref('user_visits/' + uid);
-    const totalRef = database.ref('totalViews');
+    const totalRef = database.ref('totalViews');as
     const logRef = database.ref('accessLogs');
     const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
