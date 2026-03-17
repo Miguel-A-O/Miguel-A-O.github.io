@@ -19,51 +19,37 @@ const auth = firebase.auth();
 // 3. The Unified Logic
 async function handleAutomaticView() {
   try {
-
+    // 1. Ensure Auth is active
     const userCredential = await auth.signInAnonymously();
-console.log("Current User UID:", userCredential.user.uid); 
-console.log("Is Anonymous:", userCredential.user.isAnonymous);
-    // Force a clean sign-in
     const uid = userCredential.user.uid;
-    
-    // Add a tiny delay (500ms) to ensure the server knows who you are
-    await new Promise(resolve => setTimeout(resolve, 500)); 
 
     const userVisitRef = database.ref('user_visits/' + uid);
-    const totalRef = database.ref('totalViews');as
+    const totalRef = database.ref('totalViews');
     const logRef = database.ref('accessLogs');
     const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
-    // B. Update the individual user visit first (to satisfy the Security Rule)
-    // This will FAIL if the user visited less than 12 hours ago
-    await userVisitRef.set(serverTime);
+    // 2. Log the visit attempt first (Information gathering)
+    logRef.push({
+      timestamp: serverTime,
+      device: navigator.userAgent,
+      action: "page_load_attempt",
+      uid: uid
+    });
 
-    // C. If the above passed, increment the total count
-    const result = await totalRef.transaction((current) => (current || 0) + 1);
+    // 3. Update User Visit (Silent - if it fails, we don't stop)
+    userVisitRef.set(serverTime).catch(e => console.log("Visit record skipped"));
+
+    // 4. THE COUNTER: This is the main event
+    const result = await totalRef.transaction((current) => {
+      return (current || 0) + 1;
+    });
 
     if (result.committed) {
-      // D. Log the success automatically
-      logRef.push({
-        timestamp: serverTime,
-        device: navigator.userAgent,
-        action: "increment_success",
-        newCount: result.snapshot.val(),
-        uid: uid
-      });
+      console.log("Counter updated to:", result.snapshot.val());
     }
 
   } catch (error) {
-    // E. Log the rejection (if someone tries to spam or bypass)
-    database.ref('accessLogs').push({
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-        device: navigator.userAgent,
-        action: "REJECTED_OR_COOLDOWN",
-        error: error.message
-    });
-    
-    if (error.code === 'PERMISSION_DENIED') {
-        console.warn("View blocked: Security rules enforced cooldown or unauthorized access.");
-    }
+    console.error("Critical Error:", error.message);
   }
 }
 
