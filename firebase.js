@@ -19,8 +19,11 @@ const auth = firebase.auth();
 // 3. The Unified Logic
 async function handleAutomaticView() {
   try {
-    // Force a clean sign-in
+
     const userCredential = await auth.signInAnonymously();
+console.log("Current User UID:", userCredential.user.uid); 
+console.log("Is Anonymous:", userCredential.user.isAnonymous);
+    // Force a clean sign-in
     const uid = userCredential.user.uid;
     
     // Add a tiny delay (500ms) to ensure the server knows who you are
