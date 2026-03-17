@@ -48,4 +48,28 @@ function listenToTotal() {
 window.addEventListener('load', () => {
   handleAutomaticView();
   listenToTotal();
+
+  const toggleButton = document.querySelector('[data-sidebar-toggle]');
+  const scrim = document.querySelector('[data-scrim]');
+  const body = document.body;
+
+  const setSidebarOpen = (open) => {
+    body.dataset.sidebarOpen = open ? 'true' : 'false';
+    if (toggleButton) toggleButton.setAttribute('aria-expanded', String(open));
+  };
+
+  if (toggleButton) {
+    toggleButton.addEventListener('click', () => {
+      const isOpen = body.dataset.sidebarOpen === 'true';
+      setSidebarOpen(!isOpen);
+    });
+  }
+
+  if (scrim) {
+    scrim.addEventListener('click', () => setSidebarOpen(false));
+  }
+
+  document.querySelectorAll('.side-nav a').forEach((link) => {
+    link.addEventListener('click', () => setSidebarOpen(false));
+  });
 });
