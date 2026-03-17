@@ -11,30 +11,42 @@ const database = firebase.database();
 // 2. The Main Function
 async function handleAutomaticView() {
   try {
-    // Sign in anonymously (Automatic & Hidden)
+    // 1. Ensure Auth is actually ready
+    if (!firebase.auth) {
+        console.error("Auth library missing from HTML!");
+        return;
+    }
+
     const userCredential = await firebase.auth().signInAnonymously();
     const uid = userCredential.user.uid;
     
     const userVisitRef = database.ref('user_visits/' + uid);
     const totalRef = database.ref('totalViews');
-    const serverTime = firebase.database.ServerValue.TIMESTAMP;
+    
+    // Use the official Firebase server timestamp constant
+    const serverTimestamp = firebase.database.ServerValue.TIMESTAMP;
 
-    // STEP 1: Try to update the user's personal timestamp
-    // This will FAIL if the 12-hour rule in your console isn't met
-    await userVisitRef.set(serverTime);
+    // 2. Try to update the personal check-in
+    await userVisitRef.set(serverTimestamp);
+    console.log("Check-in successful for UID:", uid);
 
-    // STEP 2: If Step 1 succeeded, increment the global total
+    // 3. Increment the global counter
     await totalRef.transaction((current) => {
-      return (current || 0) + 1;
+        return (current || 0) + 1;
     });
 
     console.log("View counted successfully!");
+
   } catch (error) {
-    // This triggers if the user already visited in the last 12 hours
-    console.log("Visit not counted: 12-hour limit or permission denied.");
+    // If it's a permission error, it's likely the 12-hour rule working correctly
+    if (error.code === 'PERMISSION_DENIED') {
+        console.warn("Visit blocked: 12-hour limit active for this user.");
+    } else {
+        // If it's something else (network, auth config), we need to know!
+        console.error("Firebase Error:", error.code, error.message);
+    }
   }
 }
-
 // 3. Listen for the total to show it on screen
 function listenToTotal() {
   database.ref('totalViews').on('value', (snapshot) => {
