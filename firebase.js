@@ -50,10 +50,21 @@ async function handleAutomaticView() {
 }
 
 function listenToTotal() {
+  const element = document.getElementById('view-count');
+  
+  // Show a loading state so it doesn't just stay '-'
+  if (element) element.textContent = "..."; 
+
   database.ref('totalViews').on('value', (snapshot) => {
-    const count = snapshot.val() || 0;
-    const element = document.getElementById('view-count');
-    if (element) element.textContent = count;
+    const count = snapshot.val();
+    
+    if (element) {
+      // Only update if the value actually exists
+      element.textContent = (count !== null) ? count : "0";
+    }
+  }, (error) => {
+    console.error("Read failed:", error.message);
+    if (element) element.textContent = "Error";
   });
 }
 
