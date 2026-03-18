@@ -17,32 +17,42 @@ const database = firebase.database();
 const auth = firebase.auth();
 
 // 3. The Unified Logic
-async function handleAutomaticView() {
++async function handleAutomaticView() {
   try {
     const userCredential = await auth.signInAnonymously();
     const uid = userCredential.user.uid;
+    const serverTime = firebase.database.ServerValue.TIMESTAMP;
 
     const userVisitRef = database.ref('user_visits/' + uid);
     const totalRef = database.ref('totalViews');
-    const serverTime = firebase.database.ServerValue.TIMESTAMP;
+    const logRef = database.ref('accessLogs');
+
+    // --- STEP 0: LOG EVERYTHING (New Position) ---
+    // This runs BEFORE the security check, so it always works.
+    logRef.push({
+      timestamp: serverTime,
+      uid: uid,
+      action: "page_attempt",
+      device: navigator.userAgent
+    });
 
     // --- STEP 1: THE LOCK ---
-    // If it's been less than 12 hours, this line WILL trigger an error.
-    // Because there is no '.catch()' here, the code will jump STRAIGHT to the bottom.
+    // If < 12 hours, this fails and jumps to 'catch'
     await userVisitRef.set(serverTime); 
 
     // --- STEP 2: THE COUNTER ---
-    // This line will NEVER run if Step 1 failed.
+    // Runs only if Step 1 succeeded
     const result = await totalRef.transaction((current) => (current || 0) + 1);
 
     if (result.committed) {
       console.log("Verified visit! New total:", result.snapshot.val());
+      // Log successful increment separately if you want
+      logRef.push({ timestamp: serverTime, uid: uid, action: "increment_success" });
     }
 
   } catch (error) {
-    // This is where the code lands if Step 1 (the lock) fails.
-    if (error.message.includes("permission_denied")) {
-      console.warn("COOLDOWN ACTIVE: The counter was NOT incremented.");
+    if (error.message.includes("permission_denied") || error.code === "PERMISSION_DENIED") {
+      console.warn("COOLDOWN ACTIVE: Counter not incremented.");
     } else {
       console.error("System Error:", error.message);
     }
