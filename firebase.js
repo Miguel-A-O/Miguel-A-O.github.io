@@ -1,6 +1,6 @@
 // 1. Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAvqzXyxD5e2ZUYtw6EyWtILTEDNYM99I0",
+  apiKey: "##",
   authDomain: "ppablo-f1705.firebaseapp.com",
   databaseURL: "https://ppablo-f1705-default-rtdb.firebaseio.com",
   projectId: "ppablo-f1705",
