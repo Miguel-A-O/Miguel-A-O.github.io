@@ -1,4 +1,4 @@
-// 1. Configuration (Keep yours as is)
+// 1. Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAvqzXyxD5e2ZUYtw6EyWtILTEDNYM99I0",
   authDomain: "ppablo-f1705.firebaseapp.com",
@@ -16,7 +16,7 @@ if (!firebase.apps.length) {
 const database = firebase.database();
 const auth = firebase.auth();
 
-// 3. The Unified Logic
+// 3. The Logic (Defined BEFORE it is called)
 async function handleAutomaticView() {
   try {
     const userCredential = await auth.signInAnonymously();
@@ -27,84 +27,54 @@ async function handleAutomaticView() {
     const totalRef = database.ref('totalViews');
     const logRef = database.ref('accessLogs');
 
-    // --- STEP 0: LOG EVERYTHING (New Position) ---
-    // This runs BEFORE the security check, so it always works.
-    logRef.push({
+    // --- STEP 0: LOG ATTEMPT ---
+    // This will work even if the counter is blocked
+    await logRef.push({
       timestamp: serverTime,
       uid: uid,
-      action: "page_attempt",
+      action: "page_load",
       device: navigator.userAgent
     });
 
     // --- STEP 1: THE LOCK ---
-    // If < 12 hours, this fails and jumps to 'catch'
+    // If < 12 hours, this jumps to 'catch'
     await userVisitRef.set(serverTime); 
 
     // --- STEP 2: THE COUNTER ---
-    // Runs only if Step 1 succeeded
     const result = await totalRef.transaction((current) => (current || 0) + 1);
 
     if (result.committed) {
-      console.log("Verified visit! New total:", result.snapshot.val());
-      // Log successful increment separately if you want
-      logRef.push({ timestamp: serverTime, uid: uid, action: "increment_success" });
+      console.log("Counter updated to:", result.snapshot.val());
     }
 
   } catch (error) {
-    if (error.message.includes("permission_denied") || error.code === "PERMISSION_DENIED") {
-      console.warn("COOLDOWN ACTIVE: Counter not incremented.");
+    if (error.message.includes("permission_denied")) {
+      console.warn("View blocked: Security rules enforced cooldown.");
     } else {
-      console.error("System Error:", error.message);
+      console.error("Firebase Error:", error.message);
     }
   }
 }
+
 function listenToTotal() {
   const element = document.getElementById('view-count');
-  
-  // Show a loading state so it doesn't just stay '-'
-  if (element) element.textContent = "..."; 
-
   database.ref('totalViews').on('value', (snapshot) => {
-    const count = snapshot.val();
-    
-    if (element) {
-      // Only update if the value actually exists
-      element.textContent = (count !== null) ? count : "0";
-    }
-  }, (error) => {
-    console.error("Read failed:", error.message);
-    if (element) element.textContent = "Error";
+    const count = snapshot.val() || 0;
+    if (element) element.textContent = count;
   });
 }
 
-// Fire it up
+// 4. Fire it up
 window.addEventListener('load', () => {
   handleAutomaticView();
   listenToTotal();
 
-
+  // Sidebar logic
   const toggleButton = document.querySelector('[data-sidebar-toggle]');
-  const scrim = document.querySelector('[data-scrim]');
   const body = document.body;
-
-  const setSidebarOpen = (open) => {
-    body.dataset.sidebarOpen = open ? 'true' : 'false';
-    if (toggleButton) toggleButton.setAttribute('aria-expanded', String(open));
-  };
-
   if (toggleButton) {
     toggleButton.addEventListener('click', () => {
-      const isOpen = body.dataset.sidebarOpen === 'true';
-      setSidebarOpen(!isOpen);
+      body.dataset.sidebarOpen = body.dataset.sidebarOpen === 'true' ? 'false' : 'true';
     });
   }
-
-  if (scrim) {
-    scrim.addEventListener('click', () => setSidebarOpen(false));
-  }
-
-  document.querySelectorAll('.side-nav a').forEach((link) => {
-    link.addEventListener('click', () => setSidebarOpen(false));
-  });
 });
-
