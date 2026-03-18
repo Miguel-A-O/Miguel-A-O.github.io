@@ -17,7 +17,7 @@ const database = firebase.database();
 const auth = firebase.auth();
 
 // 3. The Unified Logic
-+async function handleAutomaticView() {
+async function handleAutomaticView() {
   try {
     const userCredential = await auth.signInAnonymously();
     const uid = userCredential.user.uid;
@@ -58,7 +58,6 @@ const auth = firebase.auth();
     }
   }
 }
-
 function listenToTotal() {
   const element = document.getElementById('view-count');
   
