@@ -115,6 +115,8 @@
         <p>
           Correo: ppablo@utp.edu.co<br />
           Oficina: Edificio 1 - 1B-113 <br />
+          Departamento de Matemáticas <br />
+          Universidad Tecnológica de Pereira <br />
         </p>
         <p>Redes sociales:</p>
           <div class="social-icons">
@@ -149,5 +151,18 @@
   </footer>
 
     <script src= "firebase.js"></script>
+    <script>
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    });
+    
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>

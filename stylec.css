@@ -586,6 +586,32 @@ a:focus-visible {
   text-underline-offset: 3px;
 }
 
+.sidebar-widget .index-link {
+  display: inline;
+  margin-top: 0;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 8px rgba(62, 192, 239, 0.35);
+  white-space: nowrap;
+  transition: 0.25s ease;
+}
+
+.sidebar-widget .index-link::after {
+  content: "";
+}
+
+.sidebar-widget .index-link[data-link-label="URL"]::after {
+  content: "";
+}
+
+.sidebar-widget .index-link:hover,
+.sidebar-widget .index-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* ================= BOOKS ================= */
 
 .latest-book .book-entry {
@@ -597,14 +623,15 @@ a:focus-visible {
 
 .book-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
 .book-list .book-entry {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
   padding: 1.25rem;
 
   background: rgba(10,22,36,0.6);
@@ -616,7 +643,7 @@ a:focus-visible {
 }
 
 .book-list .book-entry:only-child {
-  grid-column: 2 / 3;
+  grid-column: auto;
 }
 
 .book-list .book-entry:hover {
@@ -626,7 +653,8 @@ a:focus-visible {
 }
 
 .book-list .book-entry img {
-  width: 100%;
+  width: 200px;
+  height: auto;
   border-radius: 14px;
 }
 
@@ -827,7 +855,8 @@ a:focus-visible {
   }
 
   .intro-body,
-  .latest-book .book-entry {
+  .latest-book .book-entry,
+  .book-list .book-entry {
     grid-template-columns: 1fr;
   }
 }
@@ -858,6 +887,13 @@ a:focus-visible {
   border-bottom: none;             /* ← figcaption takes over the bottom border */
   box-shadow: var(--shadow);
   flex-shrink: 0;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, filter 0.35s ease;
+}
+
+.hobby-img:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 16px 34px rgba(62, 192, 239, 0.35);
+  filter: brightness(1.06);
 }
 
 /* ← NEW */
@@ -873,15 +909,17 @@ a:focus-visible {
 }
 
 .hobby-figure figcaption {
-  background: rgba(62, 192, 239, 0.12);
+  background: rgba(62, 192, 239, 0.2);
   border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 12px 12px;
-  padding: 1.5rem 1.85rem;
+  padding: 1rem 1.2rem;
   font-size: 1.5rem;
-  color: var(--muted);
+  color: var(--ink);
   text-align: center;
   font-family: 'Allura', cursive;
+  font-weight: 500;
+  line-height: 1.5;
 }
 /* ← END NEW */
 
@@ -890,9 +928,15 @@ a:focus-visible {
 }
 
 .hobby-text h2 {
-  color: var(--accent);
-  text-shadow: 0 0 6px rgba(62,192,239,0.4);
+  color: var(--ink);
+  text-shadow: 0 0 4px rgba(62,192,239,0.25);
   margin-bottom: 0.75rem;
+}
+
+.hobby-text p {
+  color: var(--ink);
+  font-size: 1.5em;
+  line-height: 1.7;
 }
 
 @media (max-width: 640px) {

@@ -90,7 +90,11 @@
 
 		<section class="sidebar-widget">
 			<h3>Enlaces</h3>
-				<p>CV, Google Scholar y pagina institucional.</p>
+				<p>
+					<a class="index-link" href="assets/CV.pdf" target="_blank" rel="noopener noreferrer">CV -></a><br />
+					<a class="index-link" href="https://scholar.google.com/citations?user=Aa1ij2oAAAAJ&hl=es" target="_blank" rel="noopener noreferrer">Google Scholar -></a><br />
+					<a class="index-link" href="https://basicas.utp.edu.co/maestria-en-matematicas/sin-categoria/director-del-programa/" target="_blank" rel="noopener noreferrer">Institution Page -></a>
+				</p>
 			</section>
 
       <section class="sidebar-widget">
@@ -98,6 +102,8 @@
         <p>
           Correo: ppablo@utp.edu.co<br />
           Oficina: Edificio 1 - 1B-113 <br />
+		  Departamento de Matemáticas <br />
+		  Universidad Tecnológica de Pereira <br />
         </p>
         <p>Redes sociales:</p>
           <div class="social-icons">
@@ -132,5 +138,18 @@
 	</footer>
 
 	<script src= "firebase.js"></script>
+	<script>
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    });
+    
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>
