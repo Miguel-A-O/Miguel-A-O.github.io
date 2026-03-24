@@ -831,3 +831,82 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+/* ── Hobbies zigzag grid ── only affects hobbies.html ── */
+.hobby-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.hobby-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* This class flips the row so image goes to the right */
+.hobby-item--reverse {
+  flex-direction: row-reverse;
+}
+
+.hobby-img {
+  width: 320px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;   /* ← flat bottom now that figure handles it */
+  border: 1px solid var(--border);
+  border-bottom: none;             /* ← figcaption takes over the bottom border */
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
+}
+
+/* ← NEW */
+.hobby-figure {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 320px;
+}
+
+.hobby-figure .hobby-img {
+  width: 100%;
+}
+
+.hobby-figure figcaption {
+  background: rgba(62, 192, 239, 0.12);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem 1.85rem;
+  font-size: 1.5rem;
+  color: var(--muted);
+  text-align: center;
+  font-family: 'Allura', cursive;
+}
+/* ← END NEW */
+
+.hobby-text {
+  flex: 1;
+}
+
+.hobby-text h2 {
+  color: var(--accent);
+  text-shadow: 0 0 6px rgba(62,192,239,0.4);
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .hobby-item,
+  .hobby-item--reverse {
+    flex-direction: column;
+  }
+
+  .hobby-figure {
+    width: 100%;
+  }
+
+  .hobby-figure .hobby-img {
+    height: 220px;
+  }
+}
+/* ──────────────────────────────────────────────────── */
